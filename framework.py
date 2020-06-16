@@ -78,6 +78,14 @@ def RMSprop(sdw, sdb, beta, dw, db):
     return sdw, sdb
 
 
+def Adam(sdw, sdb, vdw, vdb, beta1, beta2, dw, db):
+    vdw, vdb = gradient_descent_momentum(vdw, vdb, beta1, dw, db)
+    sdw, sdb = RMSprop(sdw, sdb, beta2, dw, db)
+    vdwc = vdw/(1-beta1)
+    vdbc = vdb/(1-beta1)
+    sdwc = sdw/(1-beta2)
+    sdbc = sdb/(1-beta2)
+    return vdw, vdb, sdw, sdb, vdwc, vdbc, sdwc, sdbc
 
 
 def forward(parameters, activation_function, last_layer_activation):
@@ -123,15 +131,25 @@ def backward(cache, activation_function, parameters, optimization):
                 cache['Z' + str(l)])
         dW, db = gradient_descent(m, cache['dZ' + str(l)], cache['A' + str(l - 1)])
         cache['dW' + str(l)], cache['db' + str(l)] = dW, db
+
         if optimization == 'gradient_descent_momentum':
             Vdw, Vdb = gradient_descent_momentum(
               Vdw, Vdb, parameters['beta'], dW, db
             )
             cache['dW' + str(l)], cache['db' + str(l)] = Vdw, Vdb
+
         elif optimization == 'RMSprop':
             Sdw, Sdb = RMSprop(
                 Sdw, Sdb, parameters['beta'], dW, db
             )
-            cache['dW' + str(l)], cache['db' + str(l)] = dW/ (np.sqrt(Sdw + 10 ** -8)), Sdb / (np.sqrt(Sdb + 10 ** -8))
+            cache['dW' + str(l)], cache['db' + str(l)] = dW / (np.sqrt(Sdw + parameters['epsilon'])),\
+                                                         Sdb / (np.sqrt(Sdb + parameters['epsilon']))
+
+        elif optimization == 'Adam':
+            Vdw, Vdb, Sdw, Sdb, vdwc, vdbc, sdwc, sdbc = Adam(
+                Sdw, Sdb, Vdw, Vdb, parameters['beta1'], parameters['beta2'], dW, db
+            )
+            cache['dW' + str(l)], cache['db' + str(l)] = vdwc/np.sqrt(sdwc + parameters['epsilon']), \
+                                                         vdbc/np.sqrt(sdbc + parameters['epsilon'])
     return cache
 
