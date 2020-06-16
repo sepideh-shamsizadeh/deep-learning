@@ -12,7 +12,7 @@ def test_sigmoid():
     )
 
 
-def test_tangh():
+def test_tanh():
     assert 0.999909204262595 == tanh(5)
     assert np.all(
         np.array(
