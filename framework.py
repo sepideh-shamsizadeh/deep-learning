@@ -18,7 +18,7 @@ def derivation_of_tanh(z):
 
 
 def ReLU(z):
-    return np.max(0, z)
+    return np.maximum(0, z)
 
 
 def derivation_of_ReLU(z):
@@ -26,7 +26,7 @@ def derivation_of_ReLU(z):
 
 
 def leaky_ReLU(z):
-    return np.max(0.01 * z, z)
+    return np.maximum(np.multiply(0.01, z), z)
 
 
 def derivation_of_leaky_ReLU(z):
