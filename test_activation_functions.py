@@ -31,7 +31,7 @@ def test_Relu():
 
 
 def test_leaky_ReLU():
-    assert 7 == ReLU(7)
+    assert 7 == leaky_ReLU(7)
     assert np.all(
         [-0.01, 3, 9, -0.004, 1.1, 0.1, -0.03, 1.2] == leaky_ReLU(
             np.array([-1, 3, 9, -0.4, 1.1, 0.1, -3, 1.2])

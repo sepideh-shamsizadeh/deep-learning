@@ -22,7 +22,7 @@ def ReLU(z):
 
 
 def derivation_of_ReLU(z):
-    return 0 if z < 0 else 1
+    return np.array([0 if v < 0 else 1 for v in z])
 
 
 def leaky_ReLU(z):
@@ -30,7 +30,7 @@ def leaky_ReLU(z):
 
 
 def derivation_of_leaky_ReLU(z):
-    return 0.01 if z < 0 else 1
+    return np.array([0.01 if v < 0 else 1 for v in z])
 
 
 def softmax(z):
