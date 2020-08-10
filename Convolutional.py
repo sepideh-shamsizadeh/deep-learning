@@ -7,3 +7,7 @@ def zero_pad(X, pad):
 
 def conv_single_step(a_slice_prev, W, b):
     return np.sum(a_slice_prev*W)+b
+
+
+def convolutional():
+    return 0
