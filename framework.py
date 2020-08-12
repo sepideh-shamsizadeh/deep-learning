@@ -22,7 +22,7 @@ def ReLU(z):
 
 
 def derivation_of_ReLU(z):
-    return np.array([0 if v < 0 else 1 for v in z])
+    return 1*(z > 0)
 
 
 def leaky_ReLU(z):
