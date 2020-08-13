@@ -1,8 +1,6 @@
 import numpy as np
-from mlxtend.data import loadlocal_mnist
-import matplotlib.pyplot as plt
 from lr_utils import load_dataset
-from framework import ReLU, sigmoid, derivation_of_ReLU
+from framework import sigmoid
 
 
 # Loading the data (cat/non-cat)
@@ -26,35 +24,41 @@ train_set_x = train_set_x_flatten / 255.
 test_set_x = test_set_x_flatten / 255.
 
 # Initialization
-n1 = 5
-n2 = 10
+nh = 15
+ny = train_set_y.shape[1]
 nx = train_set_x.shape[0]
-W1 = np.random.randn(n1, nx)*np.sqrt(2/n1)
-W2 = np.random.randn(n2, n1)*np.sqrt(2/n1)
-b1 = 0
-b2 = 0
-alpha = 0.01
+W1 = np.random.randn(nh, nx)
+W2 = np.random.randn(ny, nh)
+b1 = np.zeros(shape=(nh, 1))*0.01
+b2 = np.zeros(shape=(ny, 1))*0.01
+alpha = 0.001
 
 # Train model
-for i in range(10):
+for i in range(10000):
     # Forward propagation
     Z1 = np.dot(W1, train_set_x) + b1
-    A1 = ReLU(Z1)
+    A1 = np.tanh(Z1)
     Z2 = np.dot(W2, A1) + b2
     A2 = sigmoid(Z2)
     # Backward propagation
     dZ2 = A2 - train_set_y
     dW2 = (1/m_train) * np.dot(dZ2, A1.T)
     db2 = (1/m_train) * np.sum(dZ2, axis=1, keepdims=True)
-    dZ1 = np.dot(dW2.T, dZ2) * derivation_of_ReLU(Z1)
+    dZ1 = 1 - np.tanh(Z1) ** 2
     dW1 = (1/m_train) * np.dot(dZ1, train_set_x.T)
     db1 = (1 / m_train) * np.sum(dZ1, axis=1, keepdims=True)
-    J = 1/m_train * np.sum(train_set_y*np.log(A2) + (1-train_set_y)*np.log(1-A2))
-    print(J)
+    cost = np.sum(np.log(A2)*train_set_y + (1 - train_set_y)* np.log(1 - A2)) / m_train
+    cost = float(np.squeeze(cost))
+    if i % 200 == 0:
+        print("Cost after iteration %i: %f" % (i, cost))
+        Y_prediction_train = A2 > 0.5
+        print("train accuracy: {} %".format(100 - np.mean(np.abs(Y_prediction_train - train_set_y)) * 100))
     W1 = W1 - alpha * dW1
     b1 = b1 - alpha * db1
     W2 = W2 - alpha * dW2
     b2 = b2 - alpha * db2
+
+
 
 
 
