@@ -27,14 +27,14 @@ test_set_x = test_set_x_flatten / 255.
 nh = 4
 ny = train_set_y.shape[1]
 nx = train_set_x.shape[0]
-W1 = np.random.randn(nh, nx) * 2.8
-W2 = np.random.randn(ny, nh) * 2.8
+W1 = np.random.randn(nh, nx) * 1.8
+W2 = np.random.randn(ny, nh) * 1.8
 b1 = np.zeros(shape=(nh, 1))
 b2 = np.zeros(shape=(ny, 1))
 alpha = 0.05
 
 # Train model
-for i in range(10000):
+for i in range(3000):
     # Forward propagation
     Z1 = np.dot(W1, train_set_x) + b1
     A1 = np.tanh(Z1)
@@ -58,6 +58,13 @@ for i in range(10000):
     W2 = W2 - alpha * dW2
     b2 = b2 - alpha * db2
 
+# Predict
+Z1 = np.dot(W1, test_set_x) + b1
+A1 = np.tanh(Z1)
+Z2 = np.dot(W2, A1) + b2
+A2 = sigmoid(Z2)
+Y_prediction_test = A2 > 0.5
+print("test accuracy: {} %".format(100 - np.mean(np.abs(Y_prediction_test - test_set_y)) * 100))
 
 
 
