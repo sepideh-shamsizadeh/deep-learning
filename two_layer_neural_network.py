@@ -24,17 +24,17 @@ train_set_x = train_set_x_flatten / 255.
 test_set_x = test_set_x_flatten / 255.
 
 # Initialization
-nh = 4
+nh = 290
 ny = train_set_y.shape[1]
 nx = train_set_x.shape[0]
 W1 = np.random.randn(nh, nx) * 1.8
 W2 = np.random.randn(ny, nh) * 1.8
 b1 = np.zeros(shape=(nh, 1))
 b2 = np.zeros(shape=(ny, 1))
-alpha = 0.05
+alpha = 0.06
 
 # Train model
-for i in range(3000):
+for i in range(2000):
     # Forward propagation
     Z1 = np.dot(W1, train_set_x) + b1
     A1 = np.tanh(Z1)
