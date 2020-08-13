@@ -24,14 +24,14 @@ train_set_x = train_set_x_flatten / 255.
 test_set_x = test_set_x_flatten / 255.
 
 # Initialization
-nh = 15
+nh = 4
 ny = train_set_y.shape[1]
 nx = train_set_x.shape[0]
-W1 = np.random.randn(nh, nx)
-W2 = np.random.randn(ny, nh)
-b1 = np.zeros(shape=(nh, 1))*0.01
-b2 = np.zeros(shape=(ny, 1))*0.01
-alpha = 0.001
+W1 = np.random.randn(nh, nx) * 2.8
+W2 = np.random.randn(ny, nh) * 2.8
+b1 = np.zeros(shape=(nh, 1))
+b2 = np.zeros(shape=(ny, 1))
+alpha = 0.05
 
 # Train model
 for i in range(10000):
@@ -42,10 +42,10 @@ for i in range(10000):
     A2 = sigmoid(Z2)
     # Backward propagation
     dZ2 = A2 - train_set_y
-    dW2 = (1/m_train) * np.dot(dZ2, A1.T)
+    dW2 = (1/m_train) * np.matmul(dZ2, A1.T)
     db2 = (1/m_train) * np.sum(dZ2, axis=1, keepdims=True)
     dZ1 = 1 - np.tanh(Z1) ** 2
-    dW1 = (1/m_train) * np.dot(dZ1, train_set_x.T)
+    dW1 = (1/m_train) * np.matmul(dZ1, train_set_x.T)
     db1 = (1 / m_train) * np.sum(dZ1, axis=1, keepdims=True)
     cost = np.sum(np.log(A2)*train_set_y + (1 - train_set_y)* np.log(1 - A2)) / m_train
     cost = float(np.squeeze(cost))
