@@ -21,7 +21,62 @@ class Tensor:
             f"dtype={self.dtype}, requires_grad={self.requires_grad})"
         )
 
+    def __add__(self, other):
+        if isinstance(other, Tensor):
+            other = other.data
 
+        result = self.data + other
+        return Tensor(result, dtype=result.dtype)
+
+
+    def __sub__(self, other):
+        if isinstance(other, Tensor):
+            other = other.data
+        
+        result = self.data - other
+        return Tensor(result, dtype=result.dtype)
+    
+    def __mul__(self, other):
+        if isinstance(other, Tensor):
+            other = other.data
+        
+        result = self.data * other
+        return Tensor(result, dtype=result.dtype)
+
+    def __truediv__(self, other):
+        if isinstance(other, Tensor):
+            other = other.data
+        
+        result = self.data / other
+        return Tensor(result, dtype=result.dtype)
+    
+    def __neg__(self):
+        result = -self.data
+        return Tensor(result, dtype=result.dtype)
+
+    def __pow__(self, power):
+        result = self.data ** power
+        return Tensor(result, dtype=result.dtype)
+
+    def __radd__(self, other):
+        return self.__add__(other)
+
+    def __rsub__(self, other):
+        if isinstance(other, Tensor):
+            other = other.data
+        
+        result = other - self.data
+        return Tensor(result, dtype=result.dtype)
+
+    def __rmul__(self, other):
+        return self.__mul__(other)
+
+    def __rtruediv__(self, other):
+        if isinstance(other, Tensor):
+            other = other.data
+
+        result = other / self.data
+        return Tensor(result, dtype=result.dtype)
 
 if __name__ == "__main__":
     x = Tensor([1, 2, 3])
