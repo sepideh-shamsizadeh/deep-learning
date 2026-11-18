@@ -213,6 +213,77 @@ class TestTensor(unittest.TestCase):
             result.data, [12, 6, 4]
         )
 
+    def test_scalar_broadcasting(self):
+        a = Tensor([1, 2, 3])
+
+        np.testing.assert_array_equal(
+            (a + 5).data, [6, 7, 8]
+        )
+        np.testing.assert_array_equal(
+            (a * 2).data, [2, 4, 6]
+        )
+        np.testing.assert_array_equal(
+            (10 - a).data, [9, 8, 7]
+        )
+        np.testing.assert_allclose(
+            (12 / a).data, [12, 6, 4]
+        )
+
+    def test_vector_matrix_broadcasting(self):
+        a = Tensor([[1, 2, 3], [4, 5, 6]])
+        b = Tensor([10, 20, 30])
+
+        result = a + b
+
+        np.testing.assert_array_equal(
+            result.data,
+            [[11, 22, 33], [14, 25, 36]]
+        )
+        self.assertEqual(result.shape, (2, 3))
+
+    def test_column_broadcasting(self):
+        a = Tensor([[1], [2]])
+        b = Tensor([10, 20, 30])
+
+        result = a + b
+
+        np.testing.assert_array_equal(
+            result.data,
+            [[11, 21, 31], [12, 22, 32]]
+        )
+
+    def test_reverse_operators(self):
+        a = Tensor([1, 2, 3])
+
+        np.testing.assert_array_equal(
+            (5 + a).data, [6, 7, 8]
+        )
+        np.testing.assert_array_equal(
+            (5 - a).data, [4, 3, 2]
+        )
+        np.testing.assert_array_equal(
+            (5 * a).data, [5, 10, 15]
+        )
+        np.testing.assert_allclose(
+            (6 / a).data, [6, 3, 2]
+        )
+
+    def test_incompatible_broadcast_shapes(self):
+        a = Tensor([[1, 2, 3], [4, 5, 6]])
+        b = Tensor([10, 20])
+
+        with self.assertRaises(ValueError):
+            _ = a + b
+
+    def test_broadcasting_does_not_modify_inputs(self):
+        a = Tensor([[1], [2]])
+        b = Tensor([10, 20, 30])
+
+        _ = a + b
+
+        np.testing.assert_array_equal(a.data, [[1], [2]])
+        np.testing.assert_array_equal(b.data, [10, 20, 30])
+
 
 
 if __name__ == "__main__":
