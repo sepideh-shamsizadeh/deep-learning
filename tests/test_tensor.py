@@ -284,6 +284,71 @@ class TestTensor(unittest.TestCase):
         np.testing.assert_array_equal(a.data, [[1], [2]])
         np.testing.assert_array_equal(b.data, [10, 20, 30])
 
+    
+    def test_vector_dot_product(self):
+        a = Tensor([1, 2, 3])
+        b = Tensor([4, 5, 6])
+
+        result = a @ b
+
+        self.assertEqual(result.shape, ())
+        self.assertAlmostEqual(result.data.item(), 32)
+
+    def test_matrix_vector_multiplication(self):
+        a = Tensor([[1, 2, 3],
+                    [4, 5, 6]])
+        b = Tensor([1, 2, 3])
+
+        result = a @ b
+
+        np.testing.assert_array_equal(
+            result.data, [14, 32]
+        )
+        self.assertEqual(result.shape, (2,))
+
+    def test_vector_matrix_multiplication(self):
+        a = Tensor([1, 2, 3])
+        b = Tensor([[1, 2],
+                    [3, 4],
+                    [5, 6]])
+
+        result = a @ b
+
+        np.testing.assert_array_equal(
+            result.data, [22, 28]
+        )
+        self.assertEqual(result.shape, (2,))
+
+    def test_matrix_matrix_multiplication(self):
+        a = Tensor([[1, 2],
+                    [3, 4]])
+        b = Tensor([[5, 6],
+                    [7, 8]])
+
+        result = a @ b
+
+        np.testing.assert_array_equal(
+            result.data,
+            [[19, 22], [43, 50]]
+        )
+        self.assertEqual(result.shape, (2, 2))
+
+    def test_matmul_incompatible_shapes(self):
+        a = Tensor(np.ones((2, 3)))
+        b = Tensor(np.ones((4, 2)))
+
+        with self.assertRaises(ValueError):
+            _ = a @ b
+
+    def test_matmul_preserves_dtype(self):
+        a = Tensor([[1, 2]], dtype=np.float64)
+        b = Tensor([[3], [4]], dtype=np.float64)
+
+        result = a @ b
+
+        self.assertEqual(result.dtype, np.float64)
+
+
 
 
 if __name__ == "__main__":

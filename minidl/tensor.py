@@ -77,6 +77,14 @@ class Tensor:
 
         result = other / self.data
         return Tensor(result, dtype=result.dtype)
+    
+    def __matmul__(self, other):
+        if isinstance(other, Tensor):
+            other = other.data
+        
+        result = self.data @ other
+        return Tensor(result, dtype=result.dtype)
+        
 
 if __name__ == "__main__":
     x = Tensor([1, 2, 3])
