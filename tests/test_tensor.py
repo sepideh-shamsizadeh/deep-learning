@@ -348,6 +348,82 @@ class TestTensor(unittest.TestCase):
 
         self.assertEqual(result.dtype, np.float64)
 
+    
+    def test_sum_all(self):
+        a = Tensor([[1, 2, 3], [4, 5, 6]])
+        result = a.sum()
+
+        self.assertEqual(result.shape, ())
+        self.assertAlmostEqual(result.data.item(), 21)
+
+    def test_sum_axis_zero(self):
+        a = Tensor([[1, 2, 3], [4, 5, 6]])
+        result = a.sum(axis=0)
+
+        np.testing.assert_array_equal(
+            result.data, [5, 7, 9]
+        )
+        self.assertEqual(result.shape, (3,))
+
+    def test_sum_axis_one(self):
+        a = Tensor([[1, 2, 3], [4, 5, 6]])
+        result = a.sum(axis=1)
+
+        np.testing.assert_array_equal(
+            result.data, [6, 15]
+        )
+        self.assertEqual(result.shape, (2,))
+
+    def test_sum_keepdims(self):
+        a = Tensor([[1, 2, 3], [4, 5, 6]])
+        result = a.sum(axis=1, keepdims=True)
+
+        np.testing.assert_array_equal(
+            result.data, [[6], [15]]
+        )
+        self.assertEqual(result.shape, (2, 1))
+
+    def test_mean_all(self):
+        a = Tensor([[1, 2, 3], [4, 5, 6]])
+        result = a.mean()
+
+        self.assertEqual(result.shape, ())
+        self.assertAlmostEqual(result.data.item(), 3.5)
+
+    def test_mean_axis_zero(self):
+        a = Tensor([[1, 2, 3], [4, 5, 6]])
+        result = a.mean(axis=0)
+
+        np.testing.assert_array_equal(
+            result.data, [2.5, 3.5, 4.5]
+        )
+        self.assertEqual(result.shape, (3,))
+
+    def test_mean_axis_one(self):
+        a = Tensor([[1, 2, 3], [4, 5, 6]])
+        result = a.mean(axis=1)
+
+        np.testing.assert_array_equal(
+            result.data, [2, 5]
+        )
+        self.assertEqual(result.shape, (2,))
+
+    def test_mean_keepdims(self):
+        a = Tensor([[1, 2, 3], [4, 5, 6]])
+        result = a.mean(axis=1, keepdims=True)
+
+        np.testing.assert_array_equal(
+            result.data, [[2], [5]]
+        )
+        self.assertEqual(result.shape, (2, 1))
+
+    def test_reduction_invalid_axis(self):
+        a = Tensor([[1, 2], [3, 4]])
+
+        with self.assertRaises(np.exceptions.AxisError):
+            _ = a.sum(axis=2)
+
+
 
 
 

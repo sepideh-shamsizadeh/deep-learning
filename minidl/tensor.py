@@ -84,7 +84,24 @@ class Tensor:
         
         result = self.data @ other
         return Tensor(result, dtype=result.dtype)
-        
+
+    def sum(self, axis=None, keepdims=False):
+        result = np.sum(
+            self.data,
+            axis=axis,
+            keepdims=keepdims
+        )
+        return Tensor(result, dtype=np.asarray(result).dtype)
+
+    def mean(self, axis=None, keepdims=False):
+        result = np.mean(
+            self.data,
+            axis=axis,
+            keepdims=keepdims
+        )
+        return Tensor(result, dtype=np.asarray(result).dtype)
+
+
 
 if __name__ == "__main__":
     x = Tensor([1, 2, 3])
